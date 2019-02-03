@@ -6,6 +6,9 @@ A working version of Python3 (I am using Python 3.7.1)
 2) Activate the virtual environment `source venv/bin/activate`
 3) Install necessary requirements `pip install -r requirements.txt`
 
+* Accessing the Data *
+Data is available at https://www.kaggle.com/areeves87/rscience-popular-comment-removal/version/3
+
 * Components of the program *
 
 
