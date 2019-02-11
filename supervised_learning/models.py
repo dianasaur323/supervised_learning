@@ -3,8 +3,9 @@ from sklearn.model_selection import learning_curve
 from sklearn.model_selection import GridSearchCV, cross_val_score
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn import svm
-from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import validation_curve
 import numpy as np
 import plot
@@ -84,8 +85,8 @@ def plot_learning_curve(estimator, title, train, target, cv, train_sizes):
 
 # https://scikit-learn.org/0.15/auto_examples/model_selection/plot_confusion_matrix.html#example-model-selection-plot-confusion-matrix-py
 def plot_confusion_matrix(test, test_target, names):
-    print(test)
-    print(test_target)
+    # print(test)
+    # print(test_target)
     cm = confusion_matrix(test, test_target)
     # cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     # cm = cm.astype('float') / cm.sum(axis=1)
@@ -102,7 +103,7 @@ def plot_confusion_matrix(test, test_target, names):
     plt.show()
 
 def plot_loss_curve(estimator):
-    plt.plot(scores_train, color='green', alpha=0.8, label='Train')
+    # plt.plot(scores_train, color='green', alpha=0.8, label='Train')
     plt.ylabel('cost')
     plt.xlabel('iterations')
     plt.title("Loss Curve")
@@ -141,10 +142,18 @@ class Boosting:
     # Research: https://towardsdatascience.com/decision-tree-ensembles-bagging-and-boosting-266a8ba60fd9
     # Example of Gradient Boosting https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_regularization.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-regularization-py
     # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html#examples-using-sklearn-ensemble-gradientboostingclassifier
+    # def __init__(self):
+    #     self.params = {'n_estimators': 1000, 'max_leaf_nodes': 4, 'max_depth': None, 'random_state': 2,
+    #                'min_samples_split': 5}
+    #     self.clf = GradientBoostingClassifier(**self.params)
+
     def __init__(self):
-        self.params = {'n_estimators': 1000, 'max_leaf_nodes': 4, 'max_depth': None, 'random_state': 2,
-                   'min_samples_split': 5}
-        self.clf = GradientBoostingClassifier(**self.params)
+        self.params_dt = {'max_depth': 100,
+                  'min_samples_leaf': 200,
+                  'class_weight':"balanced"}
+        self.dt = tree.DecisionTreeClassifier(**self.params_dt)
+        self.params = {'base_estimator':self.dt}
+        self.clf = AdaBoostClassifier(**self.params)
 
 class SVM:
     def __init__(self):
@@ -155,4 +164,4 @@ class KNN:
     # EXAMPLE: https://shankarmsy.github.io/stories/knn-sklearn.html
     # https://shankarmsy.github.io/stories/knn-sklearn.html
     def __init__(self):
-        self.clf = NearestNeighbors(n_neighbors=2)
+        self.clf = KNeighborsClassifier()
