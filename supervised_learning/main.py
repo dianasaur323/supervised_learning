@@ -104,9 +104,8 @@ if __name__ == "__main__":
         # df_test_new_target = df_test_new
         if manual.upper() == "Y":
             params = {'hidden_layer_sizes': 3,
-                      'batch_size': 500,
-                      'activation':'relu',
-                      'learning_rate':0.1}
+                      'batch_size': 1000,
+                      'activation':'relu'}
                       # 'class_weight':"balanced"}
             model.clf.set_params(**params)
             start_time = time.time()
@@ -116,7 +115,7 @@ if __name__ == "__main__":
             print("--- %s seconds ---" % (time.time() - start_time))
 
             models.plot_confusion_matrix(df_test_new_target, df_test_new_pred,names)
-            models.plot_learning_curve(models.clf, "Decision Tree", \
+            models.plot_learning_curve(model.clf, "Decision Tree", \
                 df_test, df_test_target, cv=5, train_sizes=np.arange(2000,5000,1000))
             print(metrics.classification_report(df_test_new_target, df_test_new_pred,target_names=names))
 
