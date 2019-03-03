@@ -1,3 +1,5 @@
+Code is available at: https://github.com/dianasaur323/supervised_learning
+
 * Requirements *
 A working version of Python3 (I am using Python 3.7.1)
 
@@ -21,7 +23,7 @@ for SVM, "K" for KNN
 3) Data set? prompt accepts the following: "reddit" for Kaggle reddit data, empty for news data
 3) Manual? prompt accepts the following: "Y" for run of manually tuned model, empty for either grid-search
 or a static model. Not all models have a manually tuned model - only those that took too long
-to grid-search have it. 
+to grid-search have it.
 
 * Decision Tree implementation *
 https://scikit-learn.org/stable/modules/tree.html#tree
