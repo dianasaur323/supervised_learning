@@ -110,58 +110,7 @@ def plot_loss_curve(estimator):
     plt.plot(estimator.loss_curve_)
     plt.show()
 
-class DecisionTree:
-    # https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier
-    # RESEARCH: https://www.bogotobogo.com/python/scikit-learn/scikit_machine_learning_Constructing_Decision_Tree_Learning_Information_Gain_IG_Impurity_Entropy_Gini_Classification_Error.php
-    # https://www.kdnuggets.com/2017/05/simplifying-decision-tree-interpretation-decision-rules-python.html
-    # https://www.bogotobogo.com/python/scikit-learn/scikit_machine_learning_Constructing_Decision_Tree_Learning_Information_Gain_IG_Impurity_Entropy_Gini_Classification_Error.php
-    # https://scikit-learn.org/stable/modules/tree.html
-    # https://www.datascience.com/blog/random-forests-decision-trees-ensemble-methods
-    # http://dataaspirant.com/2017/02/01/decision-tree-algorithm-python-with-scikit-learn/
-    # https://stackoverflow.com/questions/48090757/text-classification-using-decision-trees-in-python
-    # https://stackoverflow.com/questions/49428469/pruning-decision-trees
-    def __init__(self):
-        self.clf = tree.DecisionTreeClassifier()
-
-    def run_model(self,x,y):
-        self.clf.fit(x,y)
-
-    def predict_model(self,x):
-        return self.clf.predict(x)
-
-    def plot_results(self,x,y):
-        title = "Decision Tree - Reddit Data Set"
-        return plot.plot_learning_curve(self.clf, title, x, y, cv=5, train_sizes=np.linspace(.1, 1.0))
-
 class NeuralNetwork:
     # https://scikit-learn.org/stable/modules/neural_networks_supervised.html
     def __init__(self):
         self.clf = MLPClassifier()
-
-class Boosting:
-    # Research: https://towardsdatascience.com/decision-tree-ensembles-bagging-and-boosting-266a8ba60fd9
-    # Example of Gradient Boosting https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_regularization.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-regularization-py
-    # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html#examples-using-sklearn-ensemble-gradientboostingclassifier
-    # def __init__(self):
-    #     self.params = {'n_estimators': 1000, 'max_leaf_nodes': 4, 'max_depth': None, 'random_state': 2,
-    #                'min_samples_split': 5}
-    #     self.clf = GradientBoostingClassifier(**self.params)
-
-    def __init__(self):
-        self.params_dt = {'max_depth': 100,
-                  'min_samples_leaf': 200,
-                  'class_weight':"balanced"}
-        self.dt = tree.DecisionTreeClassifier(**self.params_dt)
-        self.params = {'base_estimator':self.dt}
-        self.clf = AdaBoostClassifier(**self.params)
-
-class SVM:
-    def __init__(self):
-        self.clf = svm.SVC(gamma='scale',max_iter=200,class_weight='balanced')
-
-class KNN:
-    # https://scikit-learn.org/stable/modules/neighbors.html
-    # EXAMPLE: https://shankarmsy.github.io/stories/knn-sklearn.html
-    # https://shankarmsy.github.io/stories/knn-sklearn.html
-    def __init__(self):
-        self.clf = KNeighborsClassifier()
