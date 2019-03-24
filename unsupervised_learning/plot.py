@@ -12,6 +12,18 @@ def print_metrics(target, predicted, names):
     metrics.classification_report(target, predicted, names)
     pass
 
+def plot_accuracy(title, xlabel, ylabel, xvalue, yvalue):
+    plt.figure()
+    plt.suptitle(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    # plt.xlim([2, 64])
+    # plt.ylim([0, 1.0])
+    # plt.plot(components, [baseline] * len(accuracies), color = "r")
+    plt.plot(xvalue, yvalue)
+    plt.show()
+    pass
+
 # def
 
 # def plot_confusion_matrix(title='Confusion matrix', cmap=plt.cm.Blues, cm=, names=none):
