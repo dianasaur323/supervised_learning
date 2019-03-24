@@ -8,6 +8,10 @@ from sklearn.metrics import confusion_matrix
 # https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html
 # https://scikit-learn.org/0.15/auto_examples/model_selection/plot_confusion_matrix.html#example-model-selection-plot-confusion-matrix-py
 
+# plt.scatter(X[:,0],X[:,1], c=kmeans.labels_, cmap='rainbow')
+# plt.scatter(X[:,0], X[:,1], c=kmeans.labels_, cmap='rainbow')
+# plt.scatter(kmeans.cluster_centers_[:,0] ,kmeans.cluster_centers_[:,1], color='black')
+
 def print_metrics(target, predicted, names):
     metrics.classification_report(target, predicted, names)
     pass
@@ -38,6 +42,22 @@ def plot_accuracy(title, xlabel, ylabel, xvalue, yvalue):
 #     plt.xlabel('Predicted label')
 #     return plt
 
+def plot_2d(estimator, title, X, y, cv, train_sizes):
+    fig, ax = plt.subplots(figsize=(6, 6))
+    plt.scatter(X_std[km.labels == 0, 0], X_std[km.labels == 0, 1],
+                c='green', label='cluster 1')
+    plt.scatter(X_std[km.labels == 1, 0], X_std[km.labels == 1, 1],
+                c='blue', label='cluster 2')
+    plt.scatter(centroids[:, 0], centroids[:, 1], marker='*', s=300,
+                c='r', label='centroid')
+    plt.legend()
+    plt.xlim([-2, 2])
+    plt.ylim([-2, 2])
+    plt.xlabel('Eruption time in mins')
+    plt.ylabel('Waiting time to next eruption')
+    plt.title('Visualization of clustered data', fontweight='bold')
+    ax.set_aspect('equal');
+
 def plot_learning_curve(estimator, title, X, y, cv, train_sizes):
     plt.figure()
     plt.title(title)
@@ -61,3 +81,42 @@ def plot_learning_curve(estimator, title, X, y, cv, train_sizes):
 
     plt.legend(loc="best")
     return plt
+
+# X_std = StandardScaler().fit_transform(df)
+#
+# # Run local implementation of kmeans
+# km = Kmeans(n_clusters=2, max_iter=100)
+# km.fit(X_std)
+# centroids = km.centroids
+#
+# # Plot the clustered data
+# fig, ax = plt.subplots(figsize=(6, 6))
+# plt.scatter(X_std[km.labels == 0, 0], X_std[km.labels == 0, 1],
+#             c='green', label='cluster 1')
+# plt.scatter(X_std[km.labels == 1, 0], X_std[km.labels == 1, 1],
+#             c='blue', label='cluster 2')
+# plt.scatter(centroids[:, 0], centroids[:, 1], marker='*', s=300,
+#             c='r', label='centroid')
+# plt.legend()
+# plt.xlim([-2, 2])
+# plt.ylim([-2, 2])
+# plt.xlabel('Eruption time in mins')
+# plt.ylabel('Waiting time to next eruption')
+# plt.title('Visualization of clustered data', fontweight='bold')
+# ax.set_aspect('equal');
+#
+# gmm = GMM(n_components=4).fit(X)
+# labels = gmm.predict(X)
+# plt.scatter(X[:, 0], X[:, 1], c=labels, s=40, cmap='viridis');
+
+# >>> import pylab as pl
+# >>> iris = load_iris()
+# >>> pca = PCA(n_components=2).fit(iris.data)
+# >>> pca_2d = pca.transform(iris.data)
+# >>> pl.figure('Reference Plot')
+# >>> pl.scatter(pca_2d[:, 0], pca_2d[:, 1], c=iris.target)
+# >>> kmeans = KMeans(n_clusters=3, random_state=111)
+# >>> kmeans.fit(iris.data)
+# >>> pl.figure('K-means with 3 clusters')
+# >>> pl.scatter(pca_2d[:, 0], pca_2d[:, 1], c=kmeans.labels_)
+# >>> pl.show()
