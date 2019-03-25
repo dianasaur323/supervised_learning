@@ -1,4 +1,4 @@
-Code is available at: https://github.com/dianasaur323/supervised_learning
+Code is available at: https://github.com/dianasaur323/unsupervised_learning
 
 * Requirements *
 A working version of Python3 (I am using Python 3.7.1)
