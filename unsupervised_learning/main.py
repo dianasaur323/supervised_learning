@@ -118,16 +118,53 @@ def run_model(model_name, n_clusters, df_test, df_test_target):
         # gmm = GaussianMixture(n_components=n_clusters, init_params = 'random', n_init=5)
         # gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='full')
         # gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='tied')
-        # gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='diag')
-        gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='spherical')
-        gmm.fit(df_test.toarray())
-        df_test_results = gmm.predict(df_test.toarray())
-        print("--- gmm: %s seconds ---" % (time.time() - start_time))
-        models.plot_confusion_matrix(df_test_target, df_test_results,names)
-        print(metrics.classification_report(df_test_target, df_test_results,target_names=names))
-        print("AIC: %0.3f" % gmm.aic(df_test.toarray()))
-        print("BIC: %0.3f" % gmm.bic(df_test.toarray()))
-
+        gmm = None
+        if(data_set == 'reddit'):
+            gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='diag')
+        else:
+            gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='spherical')
+        if(feature_selection == ''):
+            gmm.fit(df_test.toarray())
+            df_test_results = gmm.predict(df_test.toarray())
+            print("--- gmm: %s seconds ---" % (time.time() - start_time))
+            models.plot_confusion_matrix(df_test_target, df_test_results,names)
+            print(metrics.classification_report(df_test_target, df_test_results,target_names=names))
+            print("AIC: %0.3f" % gmm.aic(df_test.toarray()))
+            print("BIC: %0.3f" % gmm.bic(df_test.toarray()))
+            print("Accuracy: %0.3f" % metrics.accuracy_score(gmm.predict(df_test.toarray()), df_test_target))
+            print(metrics.classification_report(df_test_target, df_test_results,target_names=names))
+            print("Homogeneity: %0.3f" % metrics.homogeneity_score(df_test_target, df_test_results))
+            print("Completeness: %0.3f" % metrics.completeness_score(df_test_target, df_test_results))
+            print("V-measure: %0.3f" % metrics.v_measure_score(df_test_target, df_test_results))
+            print("Adjusted Rand-Index: %.3f"
+                  % metrics.adjusted_rand_score(df_test_target, df_test_results))
+            print("AMI: %.3f"
+                  % metrics.adjusted_mutual_info_score(df_test_target, df_test_results))
+            print("Silhouette Coefficient (E): %0.3f"
+                  % metrics.silhouette_score(df_test, df_test_results, sample_size=1000))
+            print("Silhouette Coefficient (C): %0.3f"
+                  % metrics.silhouette_score(df_test, df_test_results, metric = 'cosine', sample_size=1000))
+        else:
+            gmm.fit(df_test)
+            df_test_results = gmm.predict(df_test)
+            print("--- gmm: %s seconds ---" % (time.time() - start_time))
+            models.plot_confusion_matrix(df_test_target, df_test_results,names)
+            print(metrics.classification_report(df_test_target, df_test_results,target_names=names))
+            print("AIC: %0.3f" % gmm.aic(df_test))
+            print("BIC: %0.3f" % gmm.bic(df_test))
+            print("Accuracy: %0.3f" % metrics.accuracy_score(gmm.predict(df_test), df_test_target))
+            print(metrics.classification_report(df_test_target, df_test_results,target_names=names))
+            print("Homogeneity: %0.3f" % metrics.homogeneity_score(df_test_target, df_test_results))
+            print("Completeness: %0.3f" % metrics.completeness_score(df_test_target, df_test_results))
+            print("V-measure: %0.3f" % metrics.v_measure_score(df_test_target, df_test_results))
+            print("Adjusted Rand-Index: %.3f"
+                  % metrics.adjusted_rand_score(df_test_target, df_test_results))
+            print("AMI: %.3f"
+                  % metrics.adjusted_mutual_info_score(df_test_target, df_test_results))
+            print("Silhouette Coefficient (E): %0.3f"
+                  % metrics.silhouette_score(df_test, df_test_results, sample_size=1000))
+            print("Silhouette Coefficient (C): %0.3f"
+                  % metrics.silhouette_score(df_test, df_test_results, metric = 'cosine', sample_size=1000))
         # models = [GMM(n, covariance_type='full', random_state=0).fit(Xmoon)
         #   for n in n_components]
         #     plt.plot(n_components, [m.bic(Xmoon) for m in models], label='BIC')
@@ -136,19 +173,7 @@ def run_model(model_name, n_clusters, df_test, df_test_target):
         #     plt.xlabel('n_components');
         # print(gmm.covariances_)
         # print(gmm.precisions_)
-        print("Accuracy: %0.3f" % metrics.accuracy_score(gmm.predict(df_test.toarray()), df_test_target))
-        print(metrics.classification_report(df_test_target, df_test_results,target_names=names))
-        print("Homogeneity: %0.3f" % metrics.homogeneity_score(df_test_target, df_test_results))
-        print("Completeness: %0.3f" % metrics.completeness_score(df_test_target, df_test_results))
-        print("V-measure: %0.3f" % metrics.v_measure_score(df_test_target, df_test_results))
-        print("Adjusted Rand-Index: %.3f"
-              % metrics.adjusted_rand_score(df_test_target, df_test_results))
-        print("AMI: %.3f"
-              % metrics.adjusted_mutual_info_score(df_test_target, df_test_results))
-        print("Silhouette Coefficient (E): %0.3f"
-              % metrics.silhouette_score(df_test, df_test_results, sample_size=1000))
-        print("Silhouette Coefficient (C): %0.3f"
-              % metrics.silhouette_score(df_test, df_test_results, metric = 'cosine', sample_size=1000))
+
         if(feature_selection.upper() == ''):
             n_dimensions = range(len(names), len(names)*10,10)
             gmm = [GaussianMixture(n_components=i) for i in n_dimensions]
@@ -163,7 +188,7 @@ def run_model(model_name, n_clusters, df_test, df_test_target):
         return gmm
     elif(model_name.upper() == "N"):
         model = models.NeuralNetwork()
-        params = {'hidden_layer_sizes': 3,
+        params = {'hidden_layer_sizes': 5,
                   'batch_size': 1000,
                   'activation':'relu'}
         model.clf.set_params(**params)
@@ -174,14 +199,9 @@ def run_model(model_name, n_clusters, df_test, df_test_target):
         print("--- %s seconds ---" % (time.time() - start_time))
 
         models.plot_confusion_matrix(df_test_new_target, df_test_new_pred,names)
-        models.plot_learning_curve(model.clf, "Decision Tree", \
-            df_test, df_test_target, cv=5, train_sizes=np.arange(2000,5000,1000))
-        print(metrics.classification_report(df_test_new_target, df_test_new_pred,target_names=names))
-
         models.plot_loss_curve(model.clf)
-
         models.plot_learning_curve(model.clf, "Neural Network", \
-            df_test, df_test_target, cv=5, train_sizes=np.arange(2000,5000,1000))
+            df_test, df_test_target, cv=5, train_sizes=np.arange(2000,5000,500))
 
         print(metrics.classification_report(df_test_new_target, df_test_new_pred,target_names=names))
         return model
@@ -200,7 +220,7 @@ if __name__ == "__main__":
         df_test = pd.read_csv('reddit_data/reddit_200k_test.csv',encoding='ISO-8859-1')
         df_test_new = pd.read_csv('reddit_data/reddit_200k_train.csv',encoding='ISO-8859-1')
         df_test_target = df_test['REMOVED'][:10000]
-        # df_test_new_target = df_test_new['REMOVED'][:10000]
+        df_test_new_target = df_test_new['REMOVED'][:10000]
         # vectorizer = TfidfVectorizer(tokenizer=textblob_tokenizer, stop_words = 'english')
         if(model_name.upper == "EM"): vectorizer = TfidfVectorizer(stop_words = 'english', max_features=200)
         # vectorizer = TfidfVectorizer()
@@ -240,10 +260,12 @@ if __name__ == "__main__":
         if(model_name != '' and data_set != ''):
             pca = PCA(n_components=58)
             df_test = pca.fit_transform(df_test.toarray())
+            df_test_new = pca.fit_transform(df_test_new.toarray())
             run_model(model_name, n_clusters, df_test, df_test_target)
         elif(model_name != ''):
             pca = PCA(n_components=53)
             df_test = pca.fit_transform(df_test.toarray())
+            df_test_new = pca.fit_transform(df_test_new.toarray())
             run_model(model_name, n_clusters, df_test, df_test_target)
         else:
             start_time = time.time()
@@ -341,10 +363,18 @@ if __name__ == "__main__":
         start_time = time.time()
         ica = FastICA(n_components=len(names))
         df_test_ica = ica.fit_transform(df_test.toarray())
+        i = 0
         print("--- Feature Selection: %s seconds ---" % (time.time() - start_time))
         if(model_name != ''):
             ica = FastICA(n_components=len(names))
             df_test = ica.fit_transform(df_test.toarray())
+            df_test_new = ica.fit_transform(df_test_new.toarray())
+            kurtosis_list = kurtosis(df_test)
+            # for i in range(0, len(kurtosis_list)):
+            #     if(kurtosis_list[i] < 3):
+            #         df_test = np.delete(df_test,[i],axis=1)
+            #         print("drop",i)
+            print(kurtosis(df_test_ica))
             run_model(model_name, n_clusters, df_test, df_test_target)
         else:
             if(data_set == 'reddit'):
@@ -386,23 +416,46 @@ if __name__ == "__main__":
         start_time = time.time()
         rp = SparseRandomProjection(len(names))
         df_test = rp.fit_transform(df_test)
+        df_test_new = rp.fit_transform(df_test_new.toarray())
         print("--- Feature Selection: %s seconds ---" % (time.time() - start_time))
         if(model_name != ''):
-            accuracies = []
-            components = np.int32(np.linspace(2, 64, 20))
-            for comp in components:
-                 rp = SparseRandomProjection(n_components = comp)
-                 df_test = rp.fit_transform(df_test)
-                 model = run_model(model_name, n_clusters, df_test, df_test_target)
-                 accuracies.append(metrics.v_measure_score(df_test_target, model.predict(df_test)))
-            plot.plot_accuracy(title="RP Accuracies",xlabel="n_components", ylabel="V-Measure", xvalue=components, yvalue=accuracies)
-        else:
-            print(rp.n_components_)
-            print(df_test.mean())
+            run_model(model_name, n_clusters, df_test, df_test_target)
+        #     accuracies = []
+        #     components = []
+        #     if(data_set == 'reddit'):
+        #         components = np.int32(np.linspace(2, 64, 8))
+        #     else:
+        #         components = np.int32(np.linspace(20, 200, 20))
+        #     for comp in components:
+        #          rp = SparseRandomProjection(n_components = comp)
+        #          df_test = rp.fit_transform(df_test)
+        #          model = run_model(model_name, n_clusters, df_test, df_test_target)
+        #          accuracies.append(metrics.v_measure_score(df_test_target, model.predict(df_test)))
+        #     plot.plot_accuracy(title="RP Accuracies",xlabel="n_components", ylabel="V-Measure", xvalue=components, yvalue=accuracies)
+        # else:
+        #     print(rp.n_components_)
+        #     print(df_test.mean())
     elif(feature_selection.upper() == "LDA"):
         lda = LatentDirichletAllocation(n_components = len(names))
         df_test = lda.fit_transform(df_test)
+        df_test_new = lda.fit_transform(df_test_new)
         if(model_name != ''):
             run_model(model_name, n_clusters, df_test, df_test_target)
+    elif(feature_selection.upper() == "K"):
+        kmeans = KMeans(init='random',n_clusters=100,algorithm='full')
+        kmeans.fit(df_test)
+        df_test = kmeans.predict(df_test).reshape(-1, 1)
+        df_test_new = kmeans.predict(df_test_new).reshape(-1, 1)
+        run_model(model_name, n_clusters, df_test, df_test_target)
+    elif(feature_selection.upper() == "EM"):
+        gmm = None
+        if(data_set == 'reddit'):
+            gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='diag')
+        else:
+            gmm = GaussianMixture(n_components=n_clusters, init_params = 'kmeans', n_init=5, covariance_type='spherical')
+        gmm.fit(df_test.toarray())
+        df_test = gmm.predict(df_test.toarray()).reshape(-1, 1)
+        df_test_new = gmm.predict(df_test_new.toarray()).reshape(-1, 1)
+        run_model(model_name, n_clusters, df_test, df_test_target)
     else:
         run_model(model_name, n_clusters, df_test, df_test_target)
